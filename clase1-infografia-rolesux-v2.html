@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Especialidades UX - PUCP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        
+        /* Animación suave para el cambio de contenido */
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Componente de Icono corregido para asegurar re-renderizado
+        const Icon = ({ name, className }) => {
+            const iconRef = useRef(null);
+            
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }, [name]); // Se dispara cada vez que el nombre del icono cambia
+
+            return <i data-lucide={name} className={className} ref={iconRef}></i>;
+        };
+
+        const specialties = [
+            {
+                id: 'strategy',
+                title: 'UX Strategy',
+                role: 'UX Strategist',
+                icon: 'target',
+                image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800',
+                imageAlt: 'Equipo en reunión de estrategia',
+                desc: 'Define el "por qué" del producto. Une la visión de negocio con lo que el usuario realmente necesita.',
+                color: 'bg-blue-600',
+                borderCol: 'border-blue-600',
+                textCol: 'text-blue-600',
+                lightBg: 'bg-blue-50',
+                pucpTip: 'Tu capacidad analítica de Publicidad es clave aquí para definir KPIs y valor de marca.'
+            },
+            {
+                id: 'research',
+                title: 'UX Research',
+                role: 'UX Researcher',
+                icon: 'search',
+                image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800',
+                imageAlt: 'Entrevista con usuario',
+                desc: 'Observa y escucha. Utiliza entrevistas y tests para validar si las ideas funcionan en el mundo real.',
+                color: 'bg-purple-600',
+                borderCol: 'border-purple-600',
+                textCol: 'text-purple-600',
+                lightBg: 'bg-purple-50',
+                pucpTip: 'Es la evolución del "Planner". Dejas de suponer y empiezas a validar con datos reales.'
+            },
+            {
+                id: 'ia',
+                title: 'Information Architecture',
+                role: 'IA Designer',
+                icon: 'sitemap',
+                image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=800',
+                imageAlt: 'Mapa de sitio y flujos',
+                desc: 'Crea el mapa del tesoro. Organiza menús y flujos para que nadie se pierda en la aplicación.',
+                color: 'bg-emerald-600',
+                borderCol: 'border-emerald-600',
+                textCol: 'text-emerald-600',
+                lightBg: 'bg-emerald-50',
+                pucpTip: 'Como cuando organizas una campaña compleja: aquí estructuras el contenido digital.'
+            },
+            {
+                id: 'content',
+                title: 'Content Strategy',
+                role: 'UX Writer',
+                icon: 'pen-tool',
+                image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=800',
+                imageAlt: 'Escritura de contenidos',
+                desc: 'Escribe para guiar. Crea textos claros y concisos que ayudan al usuario a completar tareas.',
+                color: 'bg-orange-600',
+                borderCol: 'border-orange-600',
+                textCol: 'text-orange-600',
+                lightBg: 'bg-orange-50',
+                pucpTip: 'Tu lado de Redactor Creativo se vuelve funcional. Menos adjetivos, más claridad.'
+            },
+            {
+                id: 'interaction',
+                title: 'Interaction Design',
+                role: 'IxD Designer',
+                icon: 'mouse-pointer-2',
+                image: 'https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&q=80&w=800',
+                imageAlt: 'Prototipado de interacción',
+                desc: 'Define el movimiento. Cómo reacciona un botón, cómo se desliza una pantalla y el feedback visual.',
+                color: 'bg-rose-600',
+                borderCol: 'border-rose-600',
+                textCol: 'text-rose-600',
+                lightBg: 'bg-rose-50',
+                pucpTip: 'Es diseñar el comportamiento. Es darle "vida" y ritmo a la navegación del usuario.'
+            },
+            {
+                id: 'visual',
+                title: 'Visual Design',
+                role: 'UI Designer',
+                icon: 'palette',
+                image: 'https://images.unsplash.com/photo-1561070791-26c145824a4d?auto=format&fit=crop&q=80&w=800',
+                imageAlt: 'Diseño de interfaz visual',
+                desc: 'Crea el look & feel. Se encarga de la jerarquía visual, el color, la tipografía y el estilo de marca.',
+                color: 'bg-pink-600',
+                borderCol: 'border-pink-600',
+                textCol: 'text-pink-600',
+                lightBg: 'bg-pink-50',
+                pucpTip: 'El rol ideal para Directores de Arte. Aquí el diseño es un sistema vivo, no una pieza estática.'
+            },
+            {
+                id: 'eng',
+                title: 'Design Engineering',
+                role: 'UX Engineer',
+                icon: 'code-2',
+                image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800',
+                imageAlt: 'Programación de interfaz',
+                desc: 'Construye el puente. Traduce el diseño a código real, asegurando que se vea perfecto en todo dispositivo.',
+                color: 'bg-indigo-600',
+                borderCol: 'border-indigo-600',
+                textCol: 'text-indigo-600',
+                lightBg: 'bg-indigo-50',
+                pucpTip: 'Para publicistas que aman la tecnología y quieren ver sus ideas funcionando de verdad.'
+            }
+        ];
+
+        function App() {
+            const [selected, setSelected] = useState(specialties[0]);
+
+            return (
+                <div className="min-h-screen py-8 px-4 md:px-12 bg-[#f8fafc]">
+                    <div className="max-w-6xl mx-auto">
+                        <header className="mb-12 text-center md:text-left border-b border-slate-200 pb-8">
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                                Especialidades del Diseño Digital
+                            </h1>
+                            <p className="text-xl text-slate-500 max-w-2xl">
+                                El diseño UX no es un solo trabajo, es un equipo. Explora qué hace cada rol y cómo se conecta con tu formación en Publicidad.
+                            </p>
+                        </header>
+
+                        <div className="grid lg:grid-cols-12 gap-10">
+                            {/* Panel Izquierdo: Lista de Especialidades */}
+                            <div className="lg:col-span-5 space-y-4 custom-scrollbar overflow-y-auto max-h-[700px] pr-2">
+                                {specialties.map((s) => (
+                                    <button
+                                        key={s.id}
+                                        onClick={() => setSelected(s)}
+                                        className={`w-full group flex items-center p-5 rounded-2xl transition-all duration-300 border-2 text-left ${
+                                            selected.id === s.id 
+                                                ? `${s.borderCol} shadow-xl transform scale-[1.02] ${s.lightBg}` 
+                                                : 'border-white bg-white hover:border-slate-200 hover:shadow-md'
+                                        }`}
+                                    >
+                                        <div className={`p-3 rounded-xl transition-transform group-hover:scale-110 ${s.color} text-white mr-5`}>
+                                            <Icon name={s.icon} className="w-7 h-7" />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className={`font-bold text-xl ${selected.id === s.id ? 'text-slate-900' : 'text-slate-700'}`}>
+                                                {s.title}
+                                            </h3>
+                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">
+                                                {s.role}
+                                            </p>
+                                        </div>
+                                        {selected.id === s.id && (
+                                            <Icon name="chevron-right" className="w-6 h-6 text-slate-400" />
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Panel Derecho: Visualización Detallada */}
+                            <div className="lg:col-span-7">
+                                <div key={selected.id} className="fade-in bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 sticky top-8">
+                                    {/* Imagen Dinámica */}
+                                    <div className="h-64 md:h-80 overflow-hidden relative group">
+                                        <img 
+                                            src={selected.image} 
+                                            alt={selected.imageAlt}
+                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-8">
+                                            <div className="flex items-center text-white">
+                                                <div className={`p-3 rounded-xl ${selected.color} mr-4 shadow-lg`}>
+                                                    <Icon name={selected.icon} className="w-8 h-8" />
+                                                </div>
+                                                <div>
+                                                    <h2 className="text-3xl font-black leading-tight">{selected.title}</h2>
+                                                    <p className="opacity-90 font-medium tracking-wide">Liderado por el {selected.role}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Contenido */}
+                                    <div className="p-8 md:p-10">
+                                        <div className="mb-8">
+                                            <h4 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-3">Descripción de la tarea</h4>
+                                            <p className="text-xl text-slate-700 leading-relaxed font-semibold">
+                                                {selected.desc}
+                                            </p>
+                                        </div>
+
+                                        <div className={`p-6 rounded-3xl ${selected.lightBg} border-2 border-dashed ${selected.borderCol} border-opacity-30`}>
+                                            <div className="flex items-start gap-4">
+                                                <div className={`p-2 rounded-full ${selected.color} text-white mt-1 shadow-sm`}>
+                                                    <Icon name="sparkles" className="w-4 h-4" />
+                                                </div>
+                                                <div>
+                                                    <h4 className={`font-bold text-sm uppercase tracking-wider mb-2 ${selected.textCol}`}>
+                                                        Tips para Publicistas PUCP
+                                                    </h4>
+                                                    <p className="text-slate-700 leading-snug italic font-medium">
+                                                        "{selected.pucpTip}"
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-8 flex justify-between items-center text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+                                            <span>Semana 01: Introducción al Diseño UX</span>
+                                            <span>Facultad de Comunicaciones - PUCP</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
